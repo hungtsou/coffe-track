@@ -1,0 +1,34 @@
+{
+  "name": "@worldsibu/convector-example-dsc-cc-participant",
+  "version": "1.0.0",
+  "description": "",
+  "author": "WorldSibu",
+  "license": "Apache-2.0",
+  "main": "./dist/src/index.js",
+  "typings": "./dist/src/index.d.ts",
+  "files": [
+    "dist/*",
+    "client/*"
+  ],
+  "scripts": {
+    "------------ STANDARD TASKS ------------": "",
+    "clean": "rimraf dist client",
+    "build": "npm run clean && npm run client:generate && tsc",
+    "prepare": "npm run build",
+    "test": "npm run build && mocha -r ts-node/register tests/*.spec.ts --reporter spec",
+    "------------ CHAINCODE TASKS ------------": "",
+    "client:generate": "generate-controller-interface -c ParticipantController"
+  },
+  "dependencies": {
+    "@worldsibu/convector-core-controller": "1.2.0",
+    "@worldsibu/convector-core-model": "1.2.0",
+    "reflect-metadata": "^0.1.12",
+    "yup": "^0.24.1"
+  },
+  "devDependencies": {
+    "@worldsibu/convector-adapter-mock": "1.2.0",
+    "@worldsibu/convector-core-adapter": "1.2.0",
+    "ts-node": "^7.0.0",
+    "typescript": "2.9.2"
+  }
+}
