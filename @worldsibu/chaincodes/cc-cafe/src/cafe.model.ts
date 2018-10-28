@@ -12,8 +12,6 @@ export class Cafe extends ConvectorModel<Cafe> {
   @ReadOnly()
   public readonly type = 'io.worldsibu.examples.cafe';
 
-  @ReadOnly()
-  @Required()
   @Validate(yup.string())
   /** Product Storage Receiver ID */
   public beneficioId: string;
@@ -39,7 +37,7 @@ export class Cafe extends ConvectorModel<Cafe> {
   
   @Validate(yup.string())
   /** Performance . */
-  public category: string = 'Convencional';
+  public category: string;
 
   @ReadOnly()
   @Required()

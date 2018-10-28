@@ -2,7 +2,7 @@ export class Helper {
   /** Ref to the CC name */
   public static get drugCC(): string { return process.env.CHAINCODE; }
   /** Ref to the CC name */
-  public static get cafeCC(): string { return process.env.COFEE_CHAINCODE; }
+  public static get cafeCC(): string { return process.env.CHAINCODE; }
   /** Ref to the preferred channel name.
    * In real life application this may be dynamic.
    */

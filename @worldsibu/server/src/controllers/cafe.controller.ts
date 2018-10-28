@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 import { Router, Request, Response } from 'express';
 
 import { Helper, Cafe, Models, CafeController, Participant, ParticipantController } from '../utils';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 
 const router: Router = Router();
 
@@ -18,7 +19,7 @@ ParticipantController.init();
 // });
 
 
-/** Get all the cafes! */
+/** Get all the cafe orders */
 router.get('/', async (req: Request, res: Response) => {
   console.log('get');
   const channel = Helper.channel;
@@ -45,19 +46,34 @@ router.get('/', async (req: Request, res: Response) => {
 
 });
 
-/** Update cafe category. */
-router.post('/:id/upgrade', async (req: Request, res: Response) => {
-  console.log('UPGRADE!!!');
-  let { id } = req.params;
-  let { category } = req.body;
+router.post('/', async (req: Request, res: Response) => {
+  let { id, productorId, fanegas, performance, category } = req.body;
 
   const fId = id || crypto.randomBytes(16).toString('hex');
 
   try {
     let cntrl = await CafeController.init();
-    await cntrl.assignCategory(id, category, Date.now());
+    await cntrl.create(fId, productorId, fanegas, performance || 0, Date.now());
 
     const updatedCafe = await Models.formatCafe(await Models.Cafe.getOne(fId));
+
+    res.send(updatedCafe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
+
+/** Update cafe category. */
+router.post('/:id/upgrade', async (req: Request, res: Response) => {
+  let { id } = req.params;
+  let { category } = req.body;
+
+  try {
+    let cntrl = await CafeController.init();
+    await cntrl.assignCategory(id, category, Date.now());
+    
+    const updatedCafe = await Models.formatCafe(await Models.Cafe.getOne(id));
 
     res.send(updatedCafe);
 
@@ -112,26 +128,6 @@ router.post('/:id/upgrade', async (req: Request, res: Response) => {
 
 //   } catch (err) {
 //     console.log('err');
-//     console.log(err);
-//     res.status(500).send(err);
-//   }
-// });
-
-// /** Insert one cafe. */
-// router.post('/', async (req: Request, res: Response) => {
-//   let { id, name } = req.body;
-
-//   const fId = id || crypto.randomBytes(16).toString('hex');
-
-//   try {
-//     let cntrl = await DrugController.init();
-//     await cntrl.create(id, name, Date.now());
-
-//     const updatedDrug = await Models.formatDrug(await Models.Drug.getOne(fId));
-
-//     res.send(updatedDrug);
-
-//   } catch (err) {
 //     console.log(err);
 //     res.status(500).send(err);
 //   }

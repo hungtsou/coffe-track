@@ -23,7 +23,6 @@ export namespace Models {
 
   export async function formatCafe(cafe: CafeModel): Promise<any> {
     const cafeObj = cafe.toJSON();
-    //cafeObj.createdBy = await formatParticipant(await Participant.getOne(cafeObj.createdBy));
     cafeObj.modifiedBy = await formatParticipant(await Participant.getOne(cafeObj.modifiedBy));
     cafeObj.owner = await formatParticipant(await Participant.getOne(cafeObj.owner));
     return cafeObj;
