@@ -2,21 +2,21 @@ import * as crypto from 'crypto';
 import { Router, Request, Response } from 'express';
 
 import { Helper, Cafe, Models, CafeController, Participant, ParticipantController } from '../utils';
-import { resetFakeAsyncZone } from '@angular/core/testing';
+// import { resetFakeAsyncZone } from '@angular/core/testing';
 
 const router: Router = Router();
 
 ParticipantController.init();
 
 /** Get all the users */
-// router.get('/users', async (req: Request, res: Response) => {
-//   try {
-//     res.send(await Models.getAllParticipants());
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).send(err);
-//   }
-// });
+router.get('/users', async (req: Request, res: Response) => {
+  try {
+    res.send(await Models.getAllParticipants());
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
 
 
 /** Get all the cafe orders */

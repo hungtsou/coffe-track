@@ -37,7 +37,7 @@ export class Cafe extends ConvectorModel<Cafe> {
   
   @Validate(yup.string())
   /** Performance . */
-  public category: string = 'Convencional';
+  public category: string;
 
   @ReadOnly()
   @Required()
