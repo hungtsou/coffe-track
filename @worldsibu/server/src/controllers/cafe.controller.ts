@@ -18,15 +18,15 @@ ParticipantController.init();
 // });
 
 
-/** Get all the drugs! */
+/** Get all the cafes! */
 router.get('/', async (req: Request, res: Response) => {
   console.log('get');
   const channel = Helper.channel;
   const cc = Helper.cafeCC;
-  // _drug is equivalent to the name of your chaincode
+  // _cafe is equivalent to the name of your chaincode
   // it gets generated on the world state
   const dbName = `${channel}_${cc}`;
-  const viewUrl = '_design/drugs/_view/all';
+  const viewUrl = '_design/cafe/_view/all';
 
   const queryOptions = { startKey: [''], endKey: [''] };
 
@@ -45,6 +45,27 @@ router.get('/', async (req: Request, res: Response) => {
 
 });
 
+/** Update cafe category. */
+router.post('/:id/upgrade', async (req: Request, res: Response) => {
+  console.log('UPGRADE!!!');
+  let { id } = req.params;
+  let { category } = req.body;
+
+  const fId = id || crypto.randomBytes(16).toString('hex');
+
+  try {
+    let cntrl = await CafeController.init();
+    await cntrl.assignCategory(id, category, Date.now());
+
+    const updatedCafe = await Models.formatCafe(await Models.Cafe.getOne(fId));
+
+    res.send(updatedCafe);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
 
 // router.get('/users', (req: Request, res: Response) => {
 //   const list = [
@@ -58,7 +79,7 @@ router.get('/', async (req: Request, res: Response) => {
 //   res.send(Users.GetUsers(list));
 // });
 
-/** Transfer the holder of the drug in the value chain. */
+/** Transfer the holder of the cafe in the value chain. */
 // router.post('/:id/transfer/', async (req: Request, res: Response) => {
 //   let { id } = req.params;
 //   let { to, reportHash, reportUrl } = req.body;
@@ -96,7 +117,7 @@ router.get('/', async (req: Request, res: Response) => {
 //   }
 // });
 
-// /** Insert one drug. */
+// /** Insert one cafe. */
 // router.post('/', async (req: Request, res: Response) => {
 //   let { id, name } = req.body;
 

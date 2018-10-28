@@ -23,8 +23,6 @@ export class CafeController extends ConvectorController {
     fanegas: number,
     @Param(yup.number())
     performance: number,
-    @Param(yup.string())
-    category: string,
     @Param(yup.number())
     created: number
   ) {
@@ -43,10 +41,6 @@ export class CafeController extends ConvectorController {
     }
     if (performance) {
       cafe.performance = performance;
-    }
-    // If not received default is 'Convencional'
-    if (category) {
-      cafe.category = category;
     }
     cafe.created = created;
     cafe.modified = created;
@@ -182,6 +176,45 @@ export class CafeController extends ConvectorController {
       action: `Transfer Coffee from ${this.sender} to ${to}`,
       from: this.sender,
       to
+    };
+
+    if (cafe.reports) {
+      cafe.reports.push(report);
+    } else {
+      cafe.reports = [report];
+    }
+
+    // Update as modified
+    cafe.modifiedBy = this.sender;
+    cafe.modified = modified;
+
+    await cafe.save();
+  }
+  
+  @Invokable()
+  public async assignCategory(
+    @Param(yup.string())
+    cafeId: string,
+    @Param(yup.string())
+    category: string,
+    @Param(yup.number())
+    modified: number
+  ) {
+    const cafe = await Cafe.getOne(cafeId);
+
+    if (cafe.owner !== this.sender) {
+      throw new Error('The current holder is the only user capable of transferring the Coffee in the value chain.');
+    }
+
+    // Change the holder.
+    cafe.category = category;
+
+    // Attach the report url. Since the user is the only responsible for the attachment, we don't check anything.
+
+    const report = {
+      action: `Update Coffee Category from ${cafe.category} to ${category} modified by ${this.sender}`,
+      from: cafe.owner,
+      to: this.sender
     };
 
     if (cafe.reports) {
