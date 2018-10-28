@@ -12,6 +12,11 @@
       "controller": "DrugController"
     },
     {
+      "name": "@worldsibu/convector-example-dsc-cc-cafe",
+      "version": "file:./@worldsibu/chaincodes/cc-cafe",
+      "controller": "CafeController"
+    },
+    {
       "name": "@worldsibu/convector-example-dsc-cc-participant",
       "version": "file:./@worldsibu/chaincodes/cc-participant",
       "controller": "ParticipantController"

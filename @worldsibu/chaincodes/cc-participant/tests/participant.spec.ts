@@ -32,12 +32,12 @@ describe('Participant', () => {
 
   it('should register a participant', async () => {
     await participantCtrl.register(new Participant({
-      name: 'Test',
+      user: 'Test',
       created: Date.now()
     }));
 
     const part = await adapter.getById<Participant>(newUserCertificate);
 
-    expect(part.name).to.eq('Test');
+    expect(part.user).to.eq('Test');
   });
 });

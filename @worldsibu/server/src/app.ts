@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/drug', DrugCtrl);
+// app.use('/coffee', CoffeeCtrl);
 
 const user = process.env.USERCERT;
 const org = process.env.ORGCERT;
