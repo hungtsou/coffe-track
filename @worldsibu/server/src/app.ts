@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import * as express from 'express';
-import { DrugCtrl } from './controllers';
+import { DrugCtrl, CafeCtrl } from './controllers';
 import * as bodyParser from 'body-parser';
 
 const app: express.Application = express();
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/drug', DrugCtrl);
-// app.use('/coffee', CoffeeCtrl);
+app.use('/cafe', CafeCtrl);
 
 const user = process.env.USERCERT;
 const org = process.env.ORGCERT;

@@ -13,6 +13,7 @@
 import { resolve } from 'path';
 import { FabricControllerAdapter } from '@worldsibu/convector-adapter-fabric';
 import { DrugControllerClient } from '@worldsibu/convector-example-dsc-cc-drug/dist/client';
+import { CafeControllerClient } from '@worldsibu/convector-example-dsc-cc-cafe/dist/client';
 import { ParticipantControllerClient, Participant } from '@worldsibu/convector-example-dsc-cc-participant/dist/client';
 
 import { Models } from './models';
@@ -78,5 +79,27 @@ export namespace ParticipantController {
     }
 
     return participantCtrl;
+  }
+}
+
+export namespace CafeController {
+  export async function init(): Promise<CafeControllerClient> {
+    const user = process.env.USERCERT || 'user1';
+
+    await SelfGenContext.getClient();
+
+    const adapter = new FabricControllerAdapter({
+      txTimeout: 300000,
+      user: user,
+      // set it later to enable Mutual TLS
+      channel: process.env.CHANNEL,
+      chaincode: process.env.CHAINCODE,
+      keyStore: resolve(__dirname, process.env.KEYSTORE),
+      networkProfile: resolve(__dirname, process.env.NETWORKPROFILE),
+      userMspPath: process.env.KEYSTORE
+    });
+
+    await adapter.init();
+    return new CafeControllerClient(adapter);
   }
 }

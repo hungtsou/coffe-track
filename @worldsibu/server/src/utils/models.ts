@@ -1,6 +1,7 @@
 import { BaseStorage } from '@worldsibu/convector-core-storage';
 import { CouchDBStorage } from '@worldsibu/convector-storage-couchdb';
 import { Drug as DrugModel } from '@worldsibu/convector-example-dsc-cc-drug';
+import { Cafe as CafeModel } from '@worldsibu/convector-example-dsc-cc-cafe';
 import { Participant as ParticipantModel } from '@worldsibu/convector-example-dsc-cc-participant';
 
 import { Helper } from './helper';
@@ -18,6 +19,14 @@ export namespace Models {
     drugObj.modifiedBy = await formatParticipant(await Participant.getOne(drugObj.modifiedBy));
     drugObj.holder = await formatParticipant(await Participant.getOne(drugObj.holder));
     return drugObj;
+  }
+
+  export async function formatCafe(cafe: CafeModel): Promise<any> {
+    const cafeObj = cafe.toJSON();
+    //cafeObj.createdBy = await formatParticipant(await Participant.getOne(cafeObj.createdBy));
+    cafeObj.modifiedBy = await formatParticipant(await Participant.getOne(cafeObj.modifiedBy));
+    cafeObj.owner = await formatParticipant(await Participant.getOne(cafeObj.owner));
+    return cafeObj;
   }
 
   export async function formatParticipant(participant: ParticipantModel): Promise<any> {
@@ -50,5 +59,6 @@ export namespace Models {
   }
 
   export const Drug = DrugModel;
+  export const Cafe = CafeModel;
   export const Participant = ParticipantModel;
 }

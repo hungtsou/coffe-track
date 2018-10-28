@@ -31,6 +31,7 @@
     "@worldsibu/convector-adapter-fabric": "1.2.0",
     "@worldsibu/convector-example-dsc-cc-drug": "1.0.0",
     "@worldsibu/convector-example-dsc-cc-participant": "1.0.0",
+    "@worldsibu/convector-example-dsc-cc-cafe": "1.0.0",
     "@worldsibu/convector-storage-couchdb": "1.2.0",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
