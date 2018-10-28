@@ -128,19 +128,15 @@ export class CafeController extends ConvectorController {
       beneficioId: 'user2',
       name: receiverId
     };
-    if (this.sender !== beneficioId ) {
+    if (this.sender !== receiverId) {
       // @TODO: Update error message
-      throw new Error('The Coffee current "Beneficio" is the only able to update this Coffee.');
-    } else if (cafe.beneficioId !== receiver.beneficioId) {
+      throw new Error('The current owner is the only user capable of transferring the Coffee in the value chain.');
+    } else if (cafe.beneficioId !== beneficioId || receiver.beneficioId !== beneficioId) {
       // @TODO: Update error message
-      throw new Error('The Coffee current "Beneficio" is the only able to transfer/receive this coffee.');
-    } else if (this.sender !== beneficioId) {
-      // @TODO: Update error message
-      throw new Error('The current user is not able to transfer this Coffee to requested "Beneficio".');
+      throw new Error('The current "Beneficio" must be the same in the value chain.');
     }
 
     // Change the owner & beneficioId.
-    cafe.beneficioId = beneficioId;
     cafe.owner = beneficioId;
 
     // Update as modified
@@ -158,6 +154,45 @@ export class CafeController extends ConvectorController {
     } else {
       cafe.reports = [report];
     }
+
+    await cafe.save();
+  }
+
+  @Invokable()
+  public async transfer(
+    @Param(yup.string())
+    cafeId: string,
+    @Param(yup.string())
+    to: string,
+    @Param(yup.number())
+    modified: number
+  ) {
+    const cafe = await Cafe.getOne(cafeId);
+
+    if (cafe.owner !== this.sender) {
+      throw new Error('The current holder is the only user capable of transferring the Coffee in the value chain.');
+    }
+
+    // Change the holder.
+    cafe.owner = to;
+
+    // Attach the report url. Since the user is the only responsible for the attachment, we don't check anything.
+
+    const report = {
+      action: `Transfer Coffee from ${this.sender} to ${to}`,
+      from: this.sender,
+      to
+    };
+
+    if (cafe.reports) {
+      cafe.reports.push(report);
+    } else {
+      cafe.reports = [report];
+    }
+
+    // Update as modified
+    cafe.modifiedBy = this.sender;
+    cafe.modified = modified;
 
     await cafe.save();
   }
