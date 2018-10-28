@@ -82,11 +82,22 @@ export class DrugController extends ConvectorController {
   }
 
   @Invokable()
-  public async getHistory(
+  public async increment(
     @Param(yup.string())
-    id: string
+    drugId: string,
+    @Param(yup.number())
+    modified: number
   ) {
-    const product = new Drug(id);
-    return await product.history();
+    const drug = await Drug.getOne(drugId);
+
+    if (drug.holder !== this.sender) {
+      throw new Error('The current holder is the only user capable of transferring the drug in the value chain.');
+    }
+
+    // Change the holder.
+    drug.counter = (drug.counter || 0) + 1;
+    drug.modified = modified;
+
+    await drug.save();
   }
 }

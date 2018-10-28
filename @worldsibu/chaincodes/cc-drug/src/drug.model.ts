@@ -46,4 +46,8 @@ export class Drug extends ConvectorModel<Drug> {
   @Validate(yup.string())
   /** Unmodifiable creator in the network. Default will be the cert requesting the creation in the controller. */
   public createdBy: string;
+
+  @Validate(yup.number())
+  /** Counter Testing */
+  public counter: number;
 }

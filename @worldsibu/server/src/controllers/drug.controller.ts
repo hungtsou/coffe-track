@@ -1,8 +1,7 @@
 import * as crypto from 'crypto';
 import { Router, Request, Response } from 'express';
 
-import { Helper } from '../utils';
-import { Drug, Models, DrugController, Participant, ParticipantController } from '../utils';
+import { Helper, Drug, Models, DrugController, Participant, ParticipantController } from '../utils';
 
 const router: Router = Router();
 
@@ -17,6 +16,7 @@ router.get('/users', async (req: Request, res: Response) => {
     res.status(500).send(err);
   }
 });
+
 
 /** Get all the drugs! */
 router.get('/', async (req: Request, res: Response) => {
@@ -66,6 +66,25 @@ router.post('/:id/transfer/', async (req: Request, res: Response) => {
   try {
     let cntrl = await DrugController.init();
     await cntrl.transfer(id, to, reportHash, reportUrl, Date.now());
+
+    const updatedDrug = await Models.formatDrug(await Models.Drug.getOne(id));
+    res.send(updatedDrug);
+
+  } catch (err) {
+    console.log('err');
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
+
+router.post('/:id/increment/', async (req: Request, res: Response) => {
+  let { id } = req.params;
+
+  try {
+    let cntrl = await DrugController.init();
+    console.log({ incrementEndpoint: id });
+    await cntrl.increment(id, Date.now());
+    console.log({ incrementEndpoint: id });
 
     const updatedDrug = await Models.formatDrug(await Models.Drug.getOne(id));
     res.send(updatedDrug);
