@@ -19,6 +19,8 @@ export class CafeController extends ConvectorController {
     id: string,
     @Param(yup.string())
     productorId: string,
+    @Param(yup.string())
+    beneficioId: string,
     @Param(yup.number())
     fanegas: number,
     @Param(yup.number())

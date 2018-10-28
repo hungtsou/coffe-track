@@ -18,7 +18,7 @@ ParticipantController.init();
 // });
 
 
-/** Get all the drugs! */
+/** Get all the cafe orders */
 router.get('/', async (req: Request, res: Response) => {
   console.log('get');
   const channel = Helper.channel;
@@ -45,6 +45,30 @@ router.get('/', async (req: Request, res: Response) => {
 
 });
 
+router.post('/', async (req: Request, res: Response) => {
+  let { id, productorId, beneficioId, fanegas, performance, category } = req.body;
+
+  // These fields will be edited by the Beneficio
+  category = category || 'Convencional';
+  performance = performance || 0;
+
+  const fId = id || crypto.randomBytes(16).toString('hex');
+
+  try {
+    let cntrl = await CafeController.init();
+    //await cntrl.create(id, productorId, fanegas, performance, category, Date.now());
+    await cntrl.create('123', 'p1', 'b1', 10, 0, 'Convenctional', Date.now());
+    res.send({ok:true, id: fId, body:req.body})
+
+    // const updatedCafe = await Models.formatCafe(await Models.Cafe.getOne(fId));
+
+    // res.send(updatedCafe);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
 
 // router.get('/users', (req: Request, res: Response) => {
 //   const list = [
@@ -91,26 +115,6 @@ router.get('/', async (req: Request, res: Response) => {
 
 //   } catch (err) {
 //     console.log('err');
-//     console.log(err);
-//     res.status(500).send(err);
-//   }
-// });
-
-// /** Insert one drug. */
-// router.post('/', async (req: Request, res: Response) => {
-//   let { id, name } = req.body;
-
-//   const fId = id || crypto.randomBytes(16).toString('hex');
-
-//   try {
-//     let cntrl = await DrugController.init();
-//     await cntrl.create(id, name, Date.now());
-
-//     const updatedDrug = await Models.formatDrug(await Models.Drug.getOne(fId));
-
-//     res.send(updatedDrug);
-
-//   } catch (err) {
 //     console.log(err);
 //     res.status(500).send(err);
 //   }
