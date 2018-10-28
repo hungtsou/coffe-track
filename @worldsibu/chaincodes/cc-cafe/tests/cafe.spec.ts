@@ -34,7 +34,7 @@ describe('Cafe', () => {
   });
 
   it('should initialize a cafe', async () => {
-    await cafeCtrl.create(cafeId, 'producer_1', 1, 1, 'Convencional', Date.now());
+    await cafeCtrl.create(cafeId, 'producer_1', 1, 1, Date.now());
 
     const cafe = await adapter.getById<Cafe>(cafeId);
 
